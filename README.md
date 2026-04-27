@@ -1,4 +1,4 @@
-# Gruppe18
+# Gruppe18 Readme file
 
 # Githubregeln
 - Nie direkt auf main arbeiten
