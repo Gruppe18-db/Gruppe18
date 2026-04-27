@@ -7,7 +7,7 @@
     error_reporting(E_ALL);
 
     require_once "query.php";  // Funktionen laden 
-    // TEST kommentar kann gelöscht werden
+    // TEST kommentar kann gelöscht werden!
     ?>
 
 
