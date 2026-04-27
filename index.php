@@ -21,10 +21,11 @@
     <label>Passwort:</label><br>
     <input type="password" name="password" required><br><br>
     
-    <button type="submit">Anmelden</button>
-</form>
-
-<form method="get" action="register_rennveranstalter.php">
-    <button type="submit">Registrieren</button>
+    <div style="display: flex; gap: 10px;">
+        <button type="submit">Anmelden</button>
+        <form method="get" action="register_rennveranstalter.php" style="margin: 0;">
+            <button type="submit">Registrieren</button>
+        </form>
+    </div>
 </form>
 
