@@ -6,7 +6,8 @@
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
 
-    require_once "query.php";  // Funktionen laden
+    require_once "query.php";  // Funktionen laden 
+    // TEST kommentar
     ?>
 
 
@@ -21,11 +22,9 @@
     <label>Passwort:</label><br>
     <input type="password" name="password" required><br><br>
     
-    <div style="display: flex; gap: 10px;">
-        <button type="submit">Anmelden</button>
-        <form method="get" action="register_rennveranstalter.php" style="margin: 0;">
-            <button type="submit">Registrieren</button>
-        </form>
-    </div>
+    <button type="submit">Anmelden</button>
 </form>
 
+<form method="get" action="register_rennveranstalter.php">
+    <button type="submit">Registrieren</button>
+</form>
