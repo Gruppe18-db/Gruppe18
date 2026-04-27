@@ -9,7 +9,7 @@
     require_once "query.php";  // Funktionen laden 
     ?>
 
-
+<!-- Oleksandra Ishmatova -->
 
     <h1>Startseite</h1>
 
