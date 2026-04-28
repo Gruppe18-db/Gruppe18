@@ -43,7 +43,6 @@ if(isset($_GET['login'])) {
     $LoginName = $_POST['LoginName'];
     $passwort = $_POST['passwort'];
     
-    $stmt = $pdo->prepare("SELECT * FROM teamchef WHERE LoginName = :LoginName AND passwort = :passwort");
     $stmt->execute(array('LoginName' => $LoginName, 'passwort' => $passwort));
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
