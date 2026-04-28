@@ -1,4 +1,4 @@
-//Dilara Öztürk
+<!-- Dilara Öztürk -->
 <?php
 session_start();
 session_destroy();
