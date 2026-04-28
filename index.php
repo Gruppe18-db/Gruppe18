@@ -43,7 +43,6 @@ if(isset($_GET['login'])) {
     $LoginName = $_POST['LoginName'];
     $passwort = $_POST['passwort'];
     
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($user !== false) {
         header("Location: Teamchef.php");
