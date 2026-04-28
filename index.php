@@ -9,12 +9,12 @@
     require_once "query.php";  // Funktionen laden 
     ?>
 
-
+<!-- Oleksandra Ishmatova -->
 
     <h1>Startseite</h1>
 
 <h2>Login Rennveranstalter</h2>
-<form method="post" action="login_renveranstalter.php">
+<form method="post" action="login_rennveranstalter.php">
     <label>Name:</label><br>
     <input type="text" name="name" required><br><br>
     
