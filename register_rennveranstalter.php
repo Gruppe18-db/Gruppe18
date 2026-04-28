@@ -1,3 +1,13 @@
+<h2>Registrierung Rennveranstalter</h2>
+
+<form method="post">
+    <input type="text" name="NameRV" placeholder="Name" required><br><br>
+    <input type="password" name="Kennwort" placeholder="Passwort" required><br><br>
+
+<button type="submit">Registrieren</button>
+
+</form>
+
 <?php
 require_once "db.php";
 
@@ -21,4 +31,7 @@ require_once "db.php";
 
 
 ?>
+
+
+
 
