@@ -21,7 +21,8 @@ require_once "db.php";
     $result = mysqli_query($connection, $query);
 
     if ($result) {
-        echo "Registrierung erfolgreich!";
+        header("Location: index.php");
+        exit;
     } else {
         echo "Fehler: " . mysqli_error($connection);
     }

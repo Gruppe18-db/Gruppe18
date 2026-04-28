@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once "db.php";
+?>
+
 <h2>Anmeldung Rennveranstalter</h2>
 
 <form method="post">
@@ -9,7 +14,6 @@
 </form>
 
 <?php
-require_once "db.php";
 
     if (!empty($_POST['NameRV']) && !empty($_POST['Kennwort'])) {
 
@@ -21,7 +25,10 @@ require_once "db.php";
     $result = mysqli_query($connection, $query);
 
     if (mysqli_num_rows($result) == 1) {
-        echo "Login erfolgreich!";
+        $_SESSION['NameRV'] = $NameRV;
+
+        header("Location: dashboard_rennveranstalter.php");
+        exit;
     } else {
         echo "Ungültige Daten!";
     }
@@ -29,4 +36,6 @@ require_once "db.php";
     
     
 ?>
+
+
 
