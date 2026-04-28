@@ -6,19 +6,17 @@ require_once "db.php";
     $NameRV = $_POST['NameRV'];
     $Kennwort = $_POST['Kennwort'];
 
-    $query = "INSERT INTO Rennveranstalter (NameRV, Kennwort) VALUES ('$NameRV', '$Kennwort')";
+    $query = "SELECT * FROM Rennveranstalter WHERE NameRV = '$NameRV' AND Kennwort = '$Kennwort'";
 
     $result = mysqli_query($connection, $query);
 
-    if ($result) {
-        echo "Registrierung erfolgreich!";
+    if (mysqli_num_rows($result) == 1) {
+        echo "Login erfolgreich!";
     } else {
-        echo "Fehler: " . mysqli_error($connection);
+        echo "Ungültige Daten!";
     }
 }
     
     
-
-
 ?>
 
