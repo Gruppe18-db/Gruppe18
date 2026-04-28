@@ -32,12 +32,6 @@
 <?php
 session_start();
 
-// Verwende die bestehende mysqli Verbindung aus db.php
-require_once "db.php";
-
-// Oder verwende PDO mit den Daten aus config.php
-require_once "config.php";
-
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -49,13 +43,11 @@ if(isset($_GET['login'])) {
     $LoginName = $_POST['LoginName'];
     $passwort = $_POST['passwort'];
     
-    // Sichere Abfrage mit prepared statement
     $stmt = $pdo->prepare("SELECT * FROM teamchef WHERE LoginName = :LoginName AND passwort = :passwort");
     $stmt->execute(array('LoginName' => $LoginName, 'passwort' => $passwort));
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($user !== false) {
-        $_SESSION['LoginName'] = $user['LoginName'];
         header("Location: Teamchef.php");
         exit();
     } else {
