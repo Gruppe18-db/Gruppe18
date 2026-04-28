@@ -1,4 +1,4 @@
-<h2>Anmelden Rennveranstalter</h2>
+<h2>Anmeldung Rennveranstalter</h2>
 
 <form method="post">
     <input type="text" name="NameRV" placeholder="Name" required><br><br>
