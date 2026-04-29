@@ -1,45 +1,54 @@
-<!-- Dilara Öztürk -->
+// Autor: Dilara Öztürk
 <?php
 session_start();
-$pdo = new PDO('mysql:host=localhost;dbname=football', 'root', '');
+$pdo = new PDO('mysql:host=dbsnk.kirchbergnet.de;dbname=gruppe18', 'gruppe18', 'p{DxGCnEX@s,');
 
 if(isset($_GET['login'])) {
-    $LoginName = $_POST['LoginName'];
-    $passwort = $_POST['passwort'];
-    $stmt = $pdo->prepare("SELECT * FROM teamchef WHERE LoginName = :LoginName AND passwort = :passwort");
-    $stmt->execute(array('LoginName' => $LoginName, 'passwort' => $passwort));
-    $user = $stmt->fetch();
+    $LoginName = $_POST['Loginname'];
+    $kennwort = $_POST['Kennwort'];
+    $stmt = $pdo->prepare("
+    SELECT tc.LoginName, tc.Kennwort, tc.Vorname, tc.Nachname, t.Teamname
+    FROM teamchef tc, team t
+    WHERE tc.LoginName = t.LoginName AND 
+    tc.LoginName = ?"
+    );
 
-    if($user !== false && password_verify($passwort, $user['passwort'])) {
-        $_SESSION['LoginName'] = $user['LoginName'];
-        header("Location: Teamchef.php");
-        exit();
+    $stmt->execute(array('LoginName' => $LoginName, 'kennwort' => $kennwort));
+    $teamchef = $stmt->fetch();
+
+    if($teamchef !== false && password_verify($kennwort, $teamchef['Kennwort'])) {
+        
+        $_SESSION['LoginName'] = $teamchef['LoginName'];
+        die('Login erfolgreich! Weiter zu <a href="FahrerVerwalten.php"> Fahrer verwalten</a>');
+        $_SESSION['Vorname'] = $teamchef['Vorname'];
+        $_SESSION['Nachname'] = $teamchef['Nachname'];
+        $_SESSION['Teamname'] = $teamchef['Teamname'];
+
     } else {
-        $errorMessage = "LoginName oder Passwort war ungültig.";
+        $errorMessage = "Loginname oder Passwort war ungültig. Bitte überprüfen Sie Ihre Eingaben.";
     }
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teamchef Login</title>
+    <title>Login Teamchef</title>
 </head>
 <body>
 
-<?php
-if(isset($errorMessage)) {
+<h1>Login Teamchef</h1>
+<p><a href="index.html">Zurück zur Startseite</a></p>
+
+<?php if(isset($errorMessage)) { 
     echo $errorMessage;
-}
-?>
+    } ?>
+
 <form action="?login=true" method="post">
-   
-    <label for="LoginName">LoginName:</label>
-    <input type="text" size="10" maxlength="100" name="LoginName" required><br>
-
-    <label for="Passwort">Passwort:</label>
-    <input type="password" id="passwort" size="10" maxlength="100" name="passwort" required><br>
-
-    <input type="submit" value="Anmelden">
+    Loginname: <input type="text" name="loginname" required><br><br>
+    Kennwort: <input type="password" name="kennwort" required><br><br>
+    <button type="submit">Anmelden</button>
 </form>
+<?php if (!empty($errorMessage)) 
+    echo "<p style='color:red;'>".htmlspecialchars($errorMessage)."</p>"; ?>
 </body>
 </html>
