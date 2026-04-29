@@ -1,13 +1,19 @@
+// Autor: Dilara Öztürk
 <?php
-// config einbinden
-require_once "config.php";
+$host = "dbsnk.kirchbergnet.de"; //92.205.168.232
+$dbname = "gruppe18";
+$user = "gruppe18";
+$password = "p{DxGCnEX@s,";
+$charset = 'utf8mb4';
 
-// Verbindung herstellen
-$connection = mysqli_connect($host, $user, $password, $db);
-
-
-// Fehler prüfen
-if (!$connection) {
-    die("Verbindung fehlgeschlagen: " . mysqli_connect_error());
-}
+$dsn = "mysql:host=$host;dbnaame=$dbname;charset=$charset";
+try {
+    $pdo = new PDO($dsn, $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
+} catch (PDOException $e); /* {
+    die('Datenbankverbindung fehlgeschlagen: ' . htmlspecialchars($e->getMessage()));
+} */
 ?>

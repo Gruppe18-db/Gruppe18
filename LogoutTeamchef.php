@@ -1,6 +1,7 @@
-//Dilara Öztürk
+// Autor: Dilara Öztürk
 <?php
 session_start();
 session_destroy();
-echo "Sie wurden erfolgreich ausgeloggt.";
+header("Location: LoginTeamchef.php");
+exit;
 ?>
