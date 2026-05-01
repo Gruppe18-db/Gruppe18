@@ -30,7 +30,7 @@ require_once "db.php";
     <p><?php echo $error; ?></p>
 
     <a href="index.php">
-        <button type="button">Zurück zur Startsite</button>
+        <button type="button">Zurück zur Startseite</button>
     </a>
 
 <?php endif; ?>

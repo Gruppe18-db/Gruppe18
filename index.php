@@ -16,10 +16,10 @@
 <h2>Login Rennveranstalter</h2>
 <form method="post" action="login_rennveranstalter.php">
     <label>Name:</label><br>
-    <input type="text" name="name" required><br><br>
+    <input type="text" name="NameRV" required><br><br>
     
     <label>Passwort:</label><br>
-    <input type="password" name="password" required><br><br>
+    <input type="password" name="Kennwort" required><br><br>
     
     <button type="submit">Anmelden</button>
 </form>
