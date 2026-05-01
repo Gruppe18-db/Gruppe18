@@ -23,11 +23,22 @@ require_once "db.php";
         header("Location: dashboard_rennveranstalter.php");
         exit;
     } else {
-        echo "Ungültige Daten!";
+        $error = "Ungültige Daten!";
+
     }
 }
     
 ?>
+
+<?php if (!empty($error)) : ?>
+    <p><?php echo $error; ?></p>
+
+    <a href="index.php">
+        <button type="button">Zurück zur Startsite</button>
+    </a>
+
+<?php endif; ?>
+
 
 <h2>Anmeldung Rennveranstalter</h2>
 
