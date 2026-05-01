@@ -3,10 +3,6 @@
 <?php
 session_start();
 require_once "db.php";
-?>
-
-
-<?php
 
     if (!empty($_POST['NameRV']) && !empty($_POST['Kennwort'])) {
 
@@ -40,15 +36,7 @@ require_once "db.php";
 <?php endif; ?>
 
 
-<h2>Anmeldung Rennveranstalter</h2>
 
-<form method="post">
-    <input type="text" name="NameRV" placeholder="Name" required><br><br>
-    <input type="password" name="Kennwort" placeholder="Passwort" required><br><br>
-
-<button type="submit">Anmelden</button>
-
-</form>
 
 
 
