@@ -22,7 +22,7 @@ $NameRV = $_SESSION['NameRV'];
     <input type="text" name="Startort" placeholder="Startort" required><br><br>
     <input type="number" name="Km" placeholder="Kilometer" required><br><br>
     <input type="number" name="Hoehenmeter" placeholder="Höhenmeter" required><br><br>
-    <input type="number" name="Steigung" placeholder="Max. Steigung" required><br><br>
+    <input type="number" name="Steigung" placeholder="Max. Steigung (in %)" required><br><br>
 
 <button type="submit">Rennen erstellen</button>
 

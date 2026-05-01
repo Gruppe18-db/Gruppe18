@@ -1,3 +1,5 @@
+<!-- Oleksandra Ishmatova -->
+
 <h2>Registrierung Rennveranstalter</h2>
 
 <form method="post">
@@ -16,19 +18,25 @@ require_once "db.php";
     $NameRV = $_POST['NameRV'];
     $Kennwort = $_POST['Kennwort'];
 
-    $query = "INSERT INTO Rennveranstalter (NameRV, Kennwort) VALUES ('$NameRV', '$Kennwort')";
+    $check = "SELECT * FROM Rennveranstalter WHERE NameRV = '$NameRV' ";
+    $check_result = mysqli_query($connection, $check);
 
-    $result = mysqli_query($connection, $query);
+    if (mysqli_num_rows($check_result) > 0) {
+        echo "Name bereits vergeben!";
 
-    if ($result) {
-        header("Location: index.php");
-        exit;
     } else {
-        echo "Fehler: " . mysqli_error($connection);
+
+        $query = "INSERT INTO Rennveranstalter (NameRV, Kennwort) VALUES ('$NameRV', '$Kennwort')";
+
+        if (mysqli_query($connection, $query)) {
+            echo "Registrierung erfolgreich!";
+            echo '<a href="index.php"><button>Zurück zur Startseite</button></a>';
+            
+         } else {
+            echo "Fehler: " . mysqli_error($connection);
+        }
     }
-}
-    
-    
+    }
 
 
 ?>
