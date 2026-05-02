@@ -11,7 +11,7 @@
 </form>
 
 <?php
-require_once "db.php";
+include 'includes/db.inc.php';
 
     if (!empty($_POST['NameRV']) && !empty($_POST['Kennwort'])) {
 
@@ -20,7 +20,7 @@ require_once "db.php";
 
 $hash = password_hash($Kennwort, PASSWORD_DEFAULT);
 
-$statement = $pdo->prepare("SELECT * FROM Rennveranstalter WHERE NameRV = :name");
+$statement = $pdo->prepare("SELECT * FROM Rennveranstalter WHERE NameRV = :name"); //Keine SQL-Injection, da nur Name überprüft wird
 $statement->execute([ ':name' => $NameRV]);
 
     if ($statement->fetch()) {

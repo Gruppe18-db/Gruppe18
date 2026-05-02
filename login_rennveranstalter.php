@@ -2,7 +2,7 @@
 
 <?php
 session_start();
-require_once "db.php";
+include 'includes/db.inc.php';
 
     if (!empty($_POST['NameRV']) && !empty($_POST['Kennwort'])) {
 

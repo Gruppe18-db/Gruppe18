@@ -2,7 +2,7 @@
 
 <?php
 session_start();
-require_once "db.php";
+include 'includes/db.inc.php';
 
 if (!isset($_SESSION['NameRV'])) {
     header("Location: index.php");
