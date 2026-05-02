@@ -9,11 +9,13 @@ require_once "db.php";
     $NameRV = $_POST['NameRV'];
     $Kennwort = $_POST['Kennwort'];
 
-    $query = "SELECT * FROM Rennveranstalter WHERE NameRV = '$NameRV' AND Kennwort = '$Kennwort'";
+    $statement = $pdo->prepare("SELECT * FROM Rennveranstalter WHERE NameRV = :name");
 
-    $result = mysqli_query($connection, $query);
+    $statement->execute([':name' => $NameRV]);
 
-    if (mysqli_num_rows($result) == 1) {
+    $user = $statement->fetch();
+
+    if ($user && password_verify($Kennwort, $user['Kennwort'])) {
         $_SESSION['NameRV'] = $NameRV;
 
         header("Location: dashboard_rennveranstalter.php");

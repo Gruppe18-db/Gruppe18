@@ -37,15 +37,22 @@ if (!empty($_POST['Datum'])) {
     $Hoehenmeter = $_POST['Hoehenmeter'];
     $Steigung = $_POST['Steigung'];
 
-    $query = "INSERT INTO Rennen 
+    $statement = $pdo->prepare( "INSERT INTO Rennen 
     (Datum, Startort, AnzahlGefahreneKilometer, Hoehenmeter, MaxSteigung, NameRV)
     VALUES 
-    ('$Datum', '$Startort', '$Km', '$Hoehenmeter', '$Steigung', '$NameRV')";
+    (:datum, :startort, :km, :hoehenmeter, :steigung, :namerv)");
 
-    if (mysqli_query($connection, $query)) {
-        echo "<p style='color:green;'>Rennen erfolgreich erstellt!</p>";
+    if ($statement->execute([ // Eingaben sind nur Werte, nicht Teil der SQL-Anweisung, daher keine SQL-Injection möglich
+        ':datum' => $Datum,
+        ':startort' => $Startort,
+        ':km' => $Km,
+        ':hoehenmeter' => $Hoehenmeter,
+        ':steigung' => $Steigung,
+        ':namerv' => $NameRV
+    ])) {
+        echo "Rennen erfolgreich erstellt!";
     } else {
-        echo "Fehler: " . mysqli_error($connection);
+        echo "Fehler beim Speichern ";
     }
 }
 ?>

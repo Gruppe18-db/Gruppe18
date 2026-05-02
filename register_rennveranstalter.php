@@ -18,25 +18,30 @@ require_once "db.php";
     $NameRV = $_POST['NameRV'];
     $Kennwort = $_POST['Kennwort'];
 
-    $check = "SELECT * FROM Rennveranstalter WHERE NameRV = '$NameRV' ";
-    $check_result = mysqli_query($connection, $check);
+$hash = password_hash($Kennwort, PASSWORD_DEFAULT);
 
-    if (mysqli_num_rows($check_result) > 0) {
+$statement = $pdo->prepare("SELECT * FROM Rennveranstalter WHERE NameRV = :name");
+$statement->execute([ ':name' => $NameRV]);
+
+    if ($statement->fetch()) {
         echo "Name bereits vergeben!";
 
     } else {
 
-        $query = "INSERT INTO Rennveranstalter (NameRV, Kennwort) VALUES ('$NameRV', '$Kennwort')";
-
-        if (mysqli_query($connection, $query)) {
+        $statement = $pdo->prepare("INSERT INTO Rennveranstalter (NameRV, Kennwort) VALUES (:name, :password)");
+      
+        if ($statement->execute([
+            ':name' => $NameRV,
+            ':password' => $hash
+        ])) {
             echo "Registrierung erfolgreich!";
             echo '<a href="index.php"><button>Zurück zur Startseite</button></a>';
             
          } else {
-            echo "Fehler: " . mysqli_error($connection);
+            echo "Fehler beim Speichern ";
         }
     }
-    }
+}
 
 
 ?>
