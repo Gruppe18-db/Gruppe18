@@ -3,15 +3,20 @@
 <?php  
 include 'includes/db.inc.php';
 
+$statement = $pdo->prepare("SELECT MitarbeiterID, TeamName, CONCAT(VornameF, ' ', NachnameF) AS Name FROM Fahrer");
+$statement->execute();
+$fahrer = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+$fahrerMap = [];
+
+foreach ($fahrer as $f) {
+    $fahrerMap[$f['MitarbeiterID']] = $f['TeamName'];
+}
+
 if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
     $rennen_id = (int) $_POST['rennen_id'];
     $fahrerListe = $_POST['fahrer'];
-
-    if(count($fahrerListe) != count(array_unique($fahrerListe))) {
-        echo "<p>Fehler: Ein Fahrer wurde mehrfach ausgewählt!</p>";
-
-    } else {
 
         $statement = $pdo->prepare("SELECT COALESCE(MAX(Startnummer), 0) + 1 AS neueStartnummer FROM NimmtTeil WHERE RID = ?"); // Berechnung der nächsten Startnummer 
         $statement->execute([$rennen_id]); //ersetzt ?
@@ -24,9 +29,7 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
         foreach ($fahrerListe as $fahrerID) {
 
-            $statementTeam = $pdo->prepare("SELECT TeamName FROM Fahrer WHERE MitarbeiterID = ?"); // Abfrage Teamname für den Fahrer
-            $statementTeam->execute([$fahrerID]);
-            $team = $statementTeam->fetch()['TeamName'];
+             $team = $fahrerMap[$fahrerID]; 
 
         try {
 
@@ -47,15 +50,10 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
     }
 
-}
-
-$statement = $pdo->prepare("SELECT RID, Datum, Startort FROM Rennen");
+$statement = $pdo->prepare("SELECT RID, Datum, Startort FROM Rennen WHERE Datum >=CURDATE()");
 $statement->execute();
 $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-$statement = $pdo->prepare("SELECT MitarbeiterID, TeamName, CONCAT(VornameF, ' ', NachnameF) AS Name FROM Fahrer");
-$statement->execute();
-$fahrer = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
