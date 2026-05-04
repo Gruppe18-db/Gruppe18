@@ -3,13 +3,57 @@
 <?php  
 include 'includes/db.inc.php';
 
+if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
+    $rennen_id = (int) $_POST['rennen_id'];
+    $fahrerListe = $_POST['fahrer'];
+
+    if(count($fahrerListe) != count(array_unique($fahrerListe))) {
+        echo "<p>Fehler: Ein Fahrer wurde mehrfach ausgewählt!</p>";
+
+    } else {
+
+        $statement = $pdo->prepare("SELECT COALESCE(MAX(Startnummer), 0) + 1 AS neueStartnummer FROM NimmtTeil WHERE RID = ?"); // Berechnung der nächsten Startnummer 
+        $statement->execute([$rennen_id]); //ersetzt ?
+        $startnummer = $statement->fetch()['neueStartnummer'];
+
+
+        $statementInsert = $pdo->prepare("INSERT INTO NimmtTeil (MitarbeiterID, Teamname, RID, Startnummer) VALUES (?, ?, ?, ?)");
+
+        $fehler = false;
+
+        foreach ($fahrerListe as $fahrerID) {
+
+            $statementTeam = $pdo->prepare("SELECT TeamName FROM Fahrer WHERE MitarbeiterID = ?"); // Abfrage Teamname für den Fahrer
+            $statementTeam->execute([$fahrerID]);
+            $team = $statementTeam->fetch()['TeamName'];
+
+        try {
+
+            $statementInsert->execute([$fahrerID, $team, $rennen_id, $startnummer]); 
+            $startnummer++; 
+
+        } catch (PDOException $e) {
+                echo "<p>Fehler beim Speichern: Fahrer ist bereits angemeldet!</p>";
+                $fehler = true; // Fehler gemerkt, um Erfolgsmeldung zu unterdrücken
+        }
+        }
+
+        if (!$fehler) {
+            echo "<p>Fahrer erfolgreich angemeldet!</p>";
+            header("Location: anmeldung_rennen.php");
+            exit;
+        }
+
+    }
+
+}
 
 $statement = $pdo->prepare("SELECT RID, Datum, Startort FROM Rennen");
 $statement->execute();
 $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-$statement = $pdo->prepare("SELECT MitarbeiterID, CONCAT(VornameF, ' ', NachnameF) AS Name FROM Fahrer");
+$statement = $pdo->prepare("SELECT MitarbeiterID, TeamName, CONCAT(VornameF, ' ', NachnameF) AS Name FROM Fahrer");
 $statement->execute();
 $fahrer = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -55,7 +99,8 @@ if (isset($_POST['weiter'])) {
 
 <form method="post">
 
-<input type="hidden" name="rennen_id" value="<?= $_POST['rennen_id'] ?>"> // Verstecktes Feld, um RID an das nächste Formular zu übergeben
+<input type="hidden" name="rennen_id" value="<?php echo $_POST['rennen_id']; ?>"> <!-- Verstecktes Feld, um RID an das nächste Formular zu übergeben -->
+<input type="hidden" name="anzahl" value="<?php echo $anzahl; ?>"> <!-- Verstecktes Feld, um Anzahl an das nächste Formular zu übergeben -->
 
 <?php 
 for ($i = 0; $i < $anzahl; $i++) { 
