@@ -26,18 +26,19 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
              $team = $fahrerMap[$fahrerID]; 
 
-        try {
+            try {
 
             $statementInsert->execute([$fahrerID, $team, $rennen_id]); 
 
-        } catch (PDOException $e) {
-                echo "<p>Fehler: Fahrer ist bereits angemeldet!</p>";
+            } catch (PDOException $e) {
+        
                 $fehler = true; // Fehler gemerkt, um Erfolgsmeldung zu unterdrücken
-        }
+            }
         }
 
-        if (!$fehler) {
-            echo "<p>Fahrer erfolgreich angemeldet!</p>";
+        if ($fehler) {
+            echo "<p>Fehler: Fahrer ist bereits angemeldet!</p>";
+        } else {
             header("Location: anmeldung_rennen.php");
             exit;
         }
@@ -61,8 +62,9 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         <?php foreach ($rennen as $r) {
         ?>
-            <option value="<?php echo $r['RID']; ?>">
-                <?php echo $r['Datum'] . " - " . $r['Startort']; ?>
+            <option value="<?php echo $r['RID']; ?>"
+            <?php if(isset($_POST['rennen_id']) && $_POST['rennen_id'] == $r['RID']) echo 'selected'; ?>>
+            <?php echo $r['Datum'] . " - " . $r['Startort']; ?>
             </option>
 
         <?php
@@ -93,6 +95,7 @@ if (isset($_POST['weiter'])) {
 
 <input type="hidden" name="rennen_id" value="<?php echo $_POST['rennen_id']; ?>"> <!-- Verstecktes Feld, um RID an das nächste Formular zu übergeben -->
 <input type="hidden" name="anzahl" value="<?php echo $anzahl; ?>"> <!-- Verstecktes Feld, um Anzahl an das nächste Formular zu übergeben -->
+
 
 <?php 
 for ($i = 0; $i < $anzahl; $i++) { 
