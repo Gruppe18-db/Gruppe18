@@ -18,12 +18,7 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
     $rennen_id = (int) $_POST['rennen_id'];
     $fahrerListe = $_POST['fahrer'];
 
-        $statement = $pdo->prepare("SELECT COALESCE(MAX(Startnummer), 0) + 1 AS neueStartnummer FROM NimmtTeil WHERE RID = ?"); // Berechnung der nächsten Startnummer 
-        $statement->execute([$rennen_id]); //ersetzt ?
-        $startnummer = $statement->fetch()['neueStartnummer'];
-
-
-        $statementInsert = $pdo->prepare("INSERT INTO NimmtTeil (MitarbeiterID, Teamname, RID, Startnummer) VALUES (?, ?, ?, ?)");
+        $statementInsert = $pdo->prepare("INSERT INTO NimmtTeil (MitarbeiterID, Teamname, RID) VALUES (?, ?, ?)");
 
         $fehler = false;
 
@@ -33,11 +28,10 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
         try {
 
-            $statementInsert->execute([$fahrerID, $team, $rennen_id, $startnummer]); 
-            $startnummer++; 
+            $statementInsert->execute([$fahrerID, $team, $rennen_id]); 
 
         } catch (PDOException $e) {
-                echo "<p>Fehler beim Speichern: Fahrer ist bereits angemeldet!</p>";
+                echo "<p>Fehler: Fahrer ist bereits angemeldet!</p>";
                 $fehler = true; // Fehler gemerkt, um Erfolgsmeldung zu unterdrücken
         }
         }
