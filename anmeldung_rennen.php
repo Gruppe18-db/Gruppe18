@@ -3,6 +3,10 @@
 <?php  
 include 'includes/db.inc.php';
 
+if (isset($_GET['success'])) {
+    echo "<p>Fahrer erfolgreich angemeldet!</p>";
+}
+
 $statement = $pdo->prepare("SELECT MitarbeiterID, TeamName, CONCAT(VornameF, ' ', NachnameF) AS Name FROM Fahrer");
 $statement->execute();
 $fahrer = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -39,7 +43,7 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
         if ($fehler) {
             echo "<p>Fehler: Fahrer ist bereits angemeldet!</p>";
         } else {
-            header("Location: anmeldung_rennen.php");
+            header("Location: anmeldung_rennen.php?success=1");
             exit;
         }
 
