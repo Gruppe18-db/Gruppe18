@@ -6,12 +6,12 @@ include 'includes/db.inc.php';
 
     if (!empty($_POST['NameRV']) && !empty($_POST['Kennwort'])) {
 
-    $NameRV = $_POST['NameRV'];
+    $NameRV = trim($_POST['NameRV']);
     $Kennwort = $_POST['Kennwort'];
 
-    $statement = $pdo->prepare("SELECT * FROM Rennveranstalter WHERE NameRV = :name");
+    $statement = $pdo->prepare("SELECT NameRV, Kennwort FROM Rennveranstalter WHERE NameRV = :name"); 
 
-    $statement->execute([':name' => $NameRV]);
+    $statement->execute(['name' => $NameRV]);
 
     $user = $statement->fetch();
 

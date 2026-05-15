@@ -32,26 +32,38 @@ $NameRV = $_SESSION['NameRV'];
 if (!empty($_POST['Datum'])) {
 
     $Datum = $_POST['Datum'];
-    $Startort = $_POST['Startort'];
-    $Km = $_POST['Km'];
-    $Hoehenmeter = $_POST['Hoehenmeter'];
-    $Steigung = $_POST['Steigung'];
+    $Startort = trim($_POST['Startort']); // führende und nachgestellte Leerzeichen entfernen
+    $Km =  (int) $_POST['Km'];
+    $Hoehenmeter = (int) $_POST['Hoehenmeter'];
+    $Steigung = (int) $_POST['Steigung'];
 
+    if (empty($Startort)) {
+        echo "Startort darf nicht leer sein!";
+        return;
+    }
+
+    if ($Km <= 0 || $Hoehenmeter < 0 || $Steigung < 0 || $Steigung > 100) {
+        echo "Kilometer, Höhenmeter und Steigung müssen positive Werte sein!";
+        return;
+    }
+
+    try {
     $statement = $pdo->prepare( "INSERT INTO Rennen 
     (Datum, Startort, AnzahlGefahreneKilometer, Hoehenmeter, MaxSteigung, NameRV)
     VALUES 
     (:datum, :startort, :km, :hoehenmeter, :steigung, :namerv)");
 
-    if ($statement->execute([ // Eingaben sind nur Werte, nicht Teil der SQL-Anweisung, daher keine SQL-Injection möglich
+     $statement->execute([ // Eingaben sind nur Werte, nicht Teil der SQL-Anweisung, daher keine SQL-Injection möglich
         ':datum' => $Datum,
         ':startort' => $Startort,
         ':km' => $Km,
         ':hoehenmeter' => $Hoehenmeter,
         ':steigung' => $Steigung,
         ':namerv' => $NameRV
-    ])) {
+    ]);
+
         echo "Rennen erfolgreich erstellt!";
-    } else {
+    } catch (PDOException $e)  {
         echo "Fehler beim Speichern ";
     }
 }

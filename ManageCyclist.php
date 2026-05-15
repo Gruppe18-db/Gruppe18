@@ -147,5 +147,12 @@ $CyclistList = getCyclist($pdo, $TeamName);
         <button type="button">Trainings verwalten</button>
     </a>
 </p>
+
+<p>
+    <a href="anmeldung_rennen.php">
+        <button type="button">Fahrer zu Rennen anmelden</button>
+    </a>
+</p>
+
 </body>
 </html>
