@@ -28,6 +28,13 @@ $NameRV = $_SESSION['NameRV'];
 
 </form>
 
+<br><br>
+<hr>
+
+<form action="ergebnisse_erfassen.php" method="get">
+    <button type="submit">Ergebnisse der Rennen erfassen</button>
+</form>
+
 <?php
 if (!empty($_POST['Datum'])) {
 
