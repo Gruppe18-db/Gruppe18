@@ -48,9 +48,7 @@ if (isset($_POST['kopieren'])) {
     foreach ($fahrerListe as $f) {
 
         try {
-
         $insert->execute([$f['MitarbeiterID'], $f['Teamname'], $zielrennen]);
-
         } catch (PDOException $e) {
             
         }
@@ -79,7 +77,6 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
     echo "<p>Fehler: Fahrer kommt doppelt vor!</p>";
     return;
-
     }
 
     $statementInsert = $pdo->prepare("INSERT INTO NimmtTeil (MitarbeiterID, Teamname, RID) VALUES (?, ?, ?)");
@@ -87,28 +84,21 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
         $fehler = false;
 
         foreach ($fahrerListe as $fahrerID) {
-
              $team = $fahrerMap[$fahrerID]; 
 
             try {
-
                 $statementInsert->execute([$fahrerID, $team, $rennen_id]); 
-
             } catch (PDOException $e) {
-        
                 $fehler = true; // Fehler gemerkt, um Erfolgsmeldung zu unterdrücken
             }
         }
 
         if ($fehler) {
-
             echo "<p>Fehler: Fahrer ist bereits angemeldet!</p>";
-
         } else {
 
             header("Location: anmeldung_rennen.php?success=1");
             exit;
-            
         }
 
     }
@@ -120,6 +110,7 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
+<div>
 <h2>Rennen auswählen</h2>
 
 <form method="post">
@@ -157,7 +148,10 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 <button type="submit" name="weiter">Weiter</button>
 
+<hr>
+</div>
 
+<div>
 <h3>Oder: Anmeldungen kopieren</h3>
 
 <label>Von Rennen kopieren:</label><br>
@@ -177,15 +171,16 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 <button type="submit" name="kopieren">Anmeldungen kopieren</button>
 
+<hr>
+</div>
 </form>
 
 <?php 
 if (isset($_POST['weiter'])) {
-
     $anzahl = $_POST['anzahl'];
-
 ?>
 
+<div>
 <h3>Fahrer auswählen</h3>
 
 <form method="post">
@@ -227,3 +222,4 @@ for ($i = 0; $i < $anzahl; $i++) {
 <?php
 }
 ?>
+</div>
