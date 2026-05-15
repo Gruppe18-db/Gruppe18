@@ -1,18 +1,24 @@
 <?php
 // Autor: Dilara Öztürk
 
-function createTeamchef($pdo, $Loginname, $Kennwort, $VornameTC, $NachnameTC) {
+function createTeamchef($pdo, $LoginnameTC, $Kennwort, $VornameTC, $NachnameTC) {
+    $hash = password_hash($Kennwort, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("
-    INSERT INTO Teamchef (Loginname, Kennwort, VornameTC, NachnameTC)
-    VALUES (?, ?, ?, ?)"
+    INSERT INTO Teamchef (Loginname, VornameTC, NachnameTC, Kennwort)
+    VALUES (:Loginname, :VornameTC, :NachnameTC, :Kennwort)"
     );
-    $stmt->execute([$Loginname, password_hash($Kennwort, PASSWORD_DEFAULT), $VornameTC, $NachnameTC]);
+    $stmt->execute([
+        'Loginname' => $LoginnameTC,
+        'VornameTC' => $VornameTC,
+        'NachnameTC' => $NachnameTC,
+        'Kennwort' => $hash
+    ]);
 }
 
-function createTeam($pdo, $TeamName) {
-    $stmt = $pdo->prepare("INSERT INTO Team (TeamName) VALUES (?)"
+function createTeam($pdo, $TeamName, $LoginnameTC) {
+    $stmt = $pdo->prepare("INSERT INTO Team (TeamName, LoginnameTC) VALUES (:TeamName, :LoginnameTC)"
     );
-    $stmt->execute([$TeamName]);
+    $stmt->execute(['TeamName' => $TeamName, 'LoginnameTC' => $LoginnameTC]);
 }
 
 function teamExists($pdo, $TeamName) {
@@ -26,19 +32,18 @@ function teamExists($pdo, $TeamName) {
 }
 
 function saveCyclist($pdo, $TeamName, $MitarbeiterID, $VornameF, $NachnameF, $Strasse, $Hausnummer, $PLZ, $Ort, $Telefonnummer) {
-    if ($MitarbeiterID) {
-        
+    if ($MitarbeiterID !== null) {
         $stmt = $pdo->prepare("
-        UPDATE Fahrer
-        SET VornameF = ?, NachnameF = ?, Strasse = ?, Hausnummer = ?, PLZ = ?, Ort = ?, Telefonnummer = ?
-        WHERE MitarbeiterID = ? AND TeamName = ?"
-        );
+            UPDATE Fahrer
+            SET VornameF = ?, NachnameF = ?, Strasse = ?, Hausnummer = ?, PLZ = ?, Ort = ?, Telefonnummer = ?
+            WHERE MitarbeiterID = ? AND TeamName = ?
+        ");
         $stmt->execute([$VornameF, $NachnameF, $Strasse, $Hausnummer, $PLZ, $Ort, $Telefonnummer, $MitarbeiterID, $TeamName]);
     } else {
         $stmt = $pdo->prepare("
-        INSERT INTO Fahrer (TeamName, VornameF, NachnameF, Strasse, Hausnummer, PLZ, Ort, Telefonnummer)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-        );
+            INSERT INTO Fahrer (TeamName, VornameF, NachnameF, Strasse, Hausnummer, PLZ, Ort, Telefonnummer)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ");
         $stmt->execute([$TeamName, $VornameF, $NachnameF, $Strasse, $Hausnummer, $PLZ, $Ort, $Telefonnummer]);
     }
 }
