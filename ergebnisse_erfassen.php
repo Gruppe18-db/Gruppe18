@@ -112,7 +112,7 @@ if ($erfasst) {
     <td><?php echo $f['Startnummer']; ?></td>
 
     <td>
-       <input type="number" min="1" name="platzierung[<?php echo $f['MitarbeiterID']; ?>]" required> //dynamisches Formular; Speichern der Platzierung unter MID
+       <input type="number" min="1" name="platzierung[<?php echo $f['MitarbeiterID']; ?>]" required> <!-- dynamisches Formular; Speichern der Platzierung unter MID -->
     </td>
 
     <td>
