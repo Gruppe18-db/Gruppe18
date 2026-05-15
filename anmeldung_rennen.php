@@ -1,15 +1,17 @@
 <!-- Oleksandra Ishmatova -->
 
 <?php  
+session_start();
 include 'includes/db.inc.php';
 
-
-if (isset($_GET['success'])) {
+if (isset($_SESSION['success'])) {
     echo "<p>Fahrer erfolgreich angemeldet!</p>";
+    unset($_SESSION['success']);
 }
 
-if (isset($_GET['copied'])) {
+if (isset($_SESSION['copied'])) {
     echo "<p>Anmeldungen erfolgreich kopiert!</p>";
+    unset($_SESSION['copied']);
 }
 
 if (isset($_POST['kopieren'])) {
@@ -53,7 +55,8 @@ if (isset($_POST['kopieren'])) {
             
         }
     }
-    header("Location: anmeldung_rennen.php?copied=1");
+    $_SESSION['copied'] = true;
+    header("Location: anmeldung_rennen.php");
     exit;
 
 }
@@ -97,7 +100,8 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
             echo "<p>Fehler: Fahrer ist bereits angemeldet!</p>";
         } else {
 
-            header("Location: anmeldung_rennen.php?success=1");
+            $_SESSION['success'] = true;
+            header("Location: anmeldung_rennen.php");
             exit;
         }
 
