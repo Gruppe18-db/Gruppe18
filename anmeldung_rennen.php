@@ -75,7 +75,14 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
     $rennen_id = (int) $_POST['rennen_id'];
     $fahrerListe = $_POST['fahrer'];
 
-        $statementInsert = $pdo->prepare("INSERT INTO NimmtTeil (MitarbeiterID, Teamname, RID) VALUES (?, ?, ?)");
+    if (count($fahrerListe) != count(array_unique($fahrerListe))) {
+
+    echo "<p>Fehler: Fahrer kommt doppelt vor!</p>";
+    return;
+
+    }
+
+    $statementInsert = $pdo->prepare("INSERT INTO NimmtTeil (MitarbeiterID, Teamname, RID) VALUES (?, ?, ?)");
 
         $fehler = false;
 
@@ -85,7 +92,7 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
 
             try {
 
-            $statementInsert->execute([$fahrerID, $team, $rennen_id]); 
+                $statementInsert->execute([$fahrerID, $team, $rennen_id]); 
 
             } catch (PDOException $e) {
         
@@ -94,10 +101,14 @@ if (isset($_POST['speichern']) && isset($_POST['fahrer'])) {
         }
 
         if ($fehler) {
+
             echo "<p>Fehler: Fahrer ist bereits angemeldet!</p>";
+
         } else {
+
             header("Location: anmeldung_rennen.php?success=1");
             exit;
+            
         }
 
     }
@@ -128,6 +139,7 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
         <?php foreach ($rennen as $r) { ?>
+
             <option value="<?php echo $r['RID']; ?>"
             <?php if(isset($_POST['rennen_id']) && $_POST['rennen_id'] == $r['RID']) echo 'selected'; ?>>
             <?php echo $r['Datum'] . " - " . $r['Startort']; ?>
@@ -149,13 +161,17 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 <h3>Oder: Anmeldungen kopieren</h3>
 
 <label>Von Rennen kopieren:</label><br>
+
 <select name="quelle_rid">
+
     <option value="">-- wählen --</option>
+
     <?php foreach ($rennenMitFahrern as $r) { ?>
         <option value="<?= $r['RID'] ?>">
             <?= $r['Datum'] . " - " . $r['Startort'] ?>
         </option>
     <?php } ?>
+
 </select>
 <br><br>
 
@@ -192,7 +208,7 @@ for ($i = 0; $i < $anzahl; $i++) {
         ?>
 
             <option value="<?php echo $f['MitarbeiterID']; ?>">
-                <?php echo $f['Name']; ?>
+                <?php echo $f['MitarbeiterID'] . " - " . $f['Name']; ?>
             </option>
 
         <?php
