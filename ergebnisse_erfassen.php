@@ -1,3 +1,5 @@
+<!-- Oleksandra Ishmatova -->
+
 <?php
 session_start();
 include 'includes/db.inc.php';

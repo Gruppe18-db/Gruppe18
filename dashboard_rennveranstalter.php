@@ -10,12 +10,57 @@ if (!isset($_SESSION['NameRV'])) {
 }
 
 $NameRV = $_SESSION['NameRV'];
+$meldung = "";
+
+if (!empty($_POST['Datum'])) {
+
+    $Datum = $_POST['Datum'];
+    $Startort = trim($_POST['Startort']); // führende und nachgestellte Leerzeichen entfernen
+    $Km =  (int) $_POST['Km'];
+    $Hoehenmeter = (int) $_POST['Hoehenmeter'];
+    $Steigung = (int) $_POST['Steigung'];
+
+    if (empty($Startort)) {
+        $meldung = "Startort darf nicht leer sein!";
+        return;
+    }
+
+    if ($Km <= 0 || $Hoehenmeter < 0 || $Steigung < 0 || $Steigung > 100) {
+        $meldung = "Kilometer, Höhenmeter und Steigung müssen positive Werte sein!";
+        return;
+    }
+
+    try {
+    $statement = $pdo->prepare( "INSERT INTO Rennen 
+    (Datum, Startort, AnzahlGefahreneKilometer, Hoehenmeter, MaxSteigung, NameRV)
+    VALUES 
+    (:datum, :startort, :km, :hoehenmeter, :steigung, :namerv)");
+
+     $statement->execute([ // Eingaben sind nur Werte, nicht Teil der SQL-Anweisung, daher keine SQL-Injection möglich
+        ':datum' => $Datum,
+        ':startort' => $Startort,
+        ':km' => $Km,
+        ':hoehenmeter' => $Hoehenmeter,
+        ':steigung' => $Steigung,
+        ':namerv' => $NameRV
+    ]);
+
+        $meldung = "Rennen erfolgreich erstellt!";
+    } catch (PDOException $e)  {
+        $meldung = "Fehler beim Speichern ";
+    }
+}
 ?>
 
 <h1>Dashboard Rennveranstalter</h1>
 <p>Willkommen <?php echo $NameRV; ?>!</p>
 
 <h2>Rennen erstellen</h2>
+
+<?php if (!empty($meldung)) { 
+    echo "<p>$meldung</p>";
+} 
+?>
 
 <form method="post">
     <input type="date" name="Datum" required><br><br>
@@ -35,43 +80,3 @@ $NameRV = $_SESSION['NameRV'];
     <button type="submit">Ergebnisse der Rennen erfassen</button>
 </form>
 
-<?php
-if (!empty($_POST['Datum'])) {
-
-    $Datum = $_POST['Datum'];
-    $Startort = trim($_POST['Startort']); // führende und nachgestellte Leerzeichen entfernen
-    $Km =  (int) $_POST['Km'];
-    $Hoehenmeter = (int) $_POST['Hoehenmeter'];
-    $Steigung = (int) $_POST['Steigung'];
-
-    if (empty($Startort)) {
-        echo "Startort darf nicht leer sein!";
-        return;
-    }
-
-    if ($Km <= 0 || $Hoehenmeter < 0 || $Steigung < 0 || $Steigung > 100) {
-        echo "Kilometer, Höhenmeter und Steigung müssen positive Werte sein!";
-        return;
-    }
-
-    try {
-    $statement = $pdo->prepare( "INSERT INTO Rennen 
-    (Datum, Startort, AnzahlGefahreneKilometer, Hoehenmeter, MaxSteigung, NameRV)
-    VALUES 
-    (:datum, :startort, :km, :hoehenmeter, :steigung, :namerv)");
-
-     $statement->execute([ // Eingaben sind nur Werte, nicht Teil der SQL-Anweisung, daher keine SQL-Injection möglich
-        ':datum' => $Datum,
-        ':startort' => $Startort,
-        ':km' => $Km,
-        ':hoehenmeter' => $Hoehenmeter,
-        ':steigung' => $Steigung,
-        ':namerv' => $NameRV
-    ]);
-
-        echo "Rennen erfolgreich erstellt!";
-    } catch (PDOException $e)  {
-        echo "Fehler beim Speichern ";
-    }
-}
-?>
