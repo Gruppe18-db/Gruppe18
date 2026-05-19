@@ -27,3 +27,13 @@
 <form method="get" action="register_rennveranstalter.php">
     <button type="submit">Registrieren</button>
 </form>
+
+<!-- Dilara Öztürk -->
+
+<form action="LoginTeamchef.php" method="post">
+    <button type="submit">Login Teamchef</button>
+</form>
+
+<form action="CreateTeam.php" method="post">
+    <button type="submit">Team anlegen</button>
+</form>
