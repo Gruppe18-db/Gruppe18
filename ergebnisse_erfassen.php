@@ -18,11 +18,12 @@ if (isset($_SESSION['success'])) {
 
 if (isset($_POST['speichern'])) {
     $rennen_id = (int) $_POST['rennen_id'];
+    $anzahlFahrer = count($_POST['platzierung']);
 
     foreach ($_POST['platzierung'] as $mitarbeiterID => $platzierung) { // platzierung[5] = 1 => MitarbeiterID 5 hat Platzierung 1
 
-        if ($platzierung < 1) {
-            echo "Platzierung muss mindestens 1 sein!";
+        if ($platzierung < 1 || $platzierung > $anzahlFahrer) {
+            echo "Ungültige Platzierung!";
             return;
         }
         
@@ -136,4 +137,5 @@ if ($erfasst) {
 }
 ?>
 
+<p><a href="dashboard_rennveranstalter.php">Zurück zum Dashboard</a></p>
 
