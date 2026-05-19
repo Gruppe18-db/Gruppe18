@@ -156,5 +156,12 @@ $CyclistList = getCyclist($pdo, $TeamName);
     </a>
 </p>
 
+<!-- Max Boger -->
+<p>
+    <a href="Auswertungsbereich.php">
+        <button>Auswertung</button>
+    </a>
+</p>
+
 </body>
 </html>
