@@ -50,7 +50,7 @@ if (!empty($_POST['LoginnameTC']) && !empty($_POST['Kennwort'])) {
 <?php if (!empty($errorMessage)) 
     echo "<p>".htmlspecialchars($errorMessage)."</p>"; ?>
 
-<p><a href="index.html">Zurück zur Startseite</a></p>
+<p><a href="index.php">Zurück zur Startseite</a></p>
 
 </body>
 </html>
