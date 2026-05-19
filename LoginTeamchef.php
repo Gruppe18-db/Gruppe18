@@ -48,7 +48,7 @@ if (!empty($_POST['LoginnameTC']) && !empty($_POST['Kennwort'])) {
     <button type="submit">Anmelden</button>
 </form>
 <?php if (!empty($errorMessage)) 
-    echo "<p>".htmlspecialchars($errorMessage)."</p>"; ?>
+    echo "<p style='color:red;'>".htmlspecialchars($errorMessage)."</p>"; ?>
 
 <p><a href="index.html">Zurück zur Startseite</a></p>
 
