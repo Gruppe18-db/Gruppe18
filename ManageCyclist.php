@@ -2,7 +2,7 @@
 // Autor: Dilara Öztürk
 session_start();
 include 'includes/db.inc.php';
-require_once __DIR__ . '/includes/Functions.inc.php';
+include 'includes/Functions.inc.php';
 
 if (!isset($_SESSION['teamchef_logged_in'])) {
     header("Location: LoginTeamchef.php");
@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['speichern'])) {
     if ($VornameF && $NachnameF) {
         saveCyclist($pdo, $TeamName, $MitarbeiterID, $VornameF, $NachnameF, $Strasse, $Hausnummer, $PLZ, $Ort, $Telefonnummer);
         $success = "Fahrer wurde erfolgreich gespeichert.";
+        header("Location: ManageCyclist.php");
     } else {
         $error = "Vorname und Nachname sind erforderlich.";
     }

@@ -2,7 +2,7 @@
 
 <?php
 require_once 'Auswertung.php';
-require_once 'db.inc.php';
+require_once 'includes/db.inc.php';
 session_start();
 
 $ziel = $_GET['ziel'];
