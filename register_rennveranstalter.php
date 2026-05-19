@@ -1,5 +1,7 @@
 <!-- Oleksandra Ishmatova -->
 
+<!-- Ermöglicht die Registrierung neuer Rennveranstalter inkl. Passwort-Hashing, Validierung und Prüfung auf doppelte benutzernamen -->
+
 <h2>Registrierung Rennveranstalter</h2>
 
 <form method="post">

@@ -1,5 +1,7 @@
 <!-- Oleksandra Ishmatova -->
 
+<!-- Ermöglicht Teamchefs das Anmelden und Kopieren eigener Fahrer zu Rennen inkl. Session-Prüfung und Teamfilterung -->
+
 <?php  
 session_start();
 include 'includes/db.inc.php';

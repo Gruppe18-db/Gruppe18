@@ -11,6 +11,8 @@
 
 <!-- Oleksandra Ishmatova -->
 
+<!-- Startseite mit Login- und Registrierungsoptionen für Rennveranstalter inkl. Session-Prüfung -->
+
     <h1>Startseite</h1>
 
 <h2>Login Rennveranstalter</h2>

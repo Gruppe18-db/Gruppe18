@@ -1,5 +1,7 @@
 <!-- Oleksandra Ishmatova -->
 
+<!-- Ermöglicht Rennveranstaltern das Erfassen von Rennergebnissen inkl. Session-Prüfung, Eintragungsvalidierung und Verhinderung mehrfacher Eintragungen -->
+
 <?php
 session_start();
 include 'includes/db.inc.php';

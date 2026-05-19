@@ -143,6 +143,8 @@ $CyclistList = getCyclist($pdo, $TeamName);
         </tr>
     <?php endforeach; ?>
 </table>
+
+<hr/>
 <p>
     <a href="ManageTraining.php">
         <button type="button">Trainings verwalten</button>
@@ -150,13 +152,13 @@ $CyclistList = getCyclist($pdo, $TeamName);
 </p>
 
 <!-- Oleksandra Ishmatova -->
-
+<hr/>
 <p>
     <a href="anmeldung_rennen.php">
         <button type="button">Fahrer zu Rennen anmelden</button>
     </a>
 </p>
-
+<hr/>
 <!-- Max Boger -->
 <p>
     <a href="Auswertungsbereich.php">

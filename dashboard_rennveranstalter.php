@@ -1,5 +1,7 @@
 <!-- Oleksandra Ishmatova -->
 
+<!-- Ermöglicht Rennveranstaltern das Erstellen neuer Rennen inkl. Session-Prüfung und Eingabevalidierung -->
+
 <?php
 session_start();
 include 'includes/db.inc.php';

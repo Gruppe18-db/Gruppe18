@@ -1,5 +1,7 @@
 <!-- Oleksandra Ishmatova -->
 
+<!-- Ermöglicht Rennveranstaltern das Anmelden mit Session-Prüfung und Passwort-Hashing -->
+
 <?php
 session_start();
 include 'includes/db.inc.php';
