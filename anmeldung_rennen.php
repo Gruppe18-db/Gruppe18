@@ -4,6 +4,13 @@
 session_start();
 include 'includes/db.inc.php';
 
+if (!isset($_SESSION['teamchef_logged_in'])) {
+    header("Location: index.php");
+    exit;
+}
+
+$teamName = $_SESSION['TeamName'];
+
 if (isset($_SESSION['success'])) {
     echo "<p>Fahrer erfolgreich angemeldet!</p>";
     unset($_SESSION['success']);
@@ -34,9 +41,13 @@ if (isset($_POST['kopieren'])) {
         return;
     }
 
-    $statement = $pdo->prepare(" SELECT MitarbeiterID, Teamname FROM NimmtTeil WHERE RID = ?");
+   $statement = $pdo->prepare("
+    SELECT MitarbeiterID, Teamname
+    FROM NimmtTeil
+    WHERE RID = ? AND Teamname = ?
+    ");
 
-    $statement->execute([$quellrennen]);
+    $statement->execute([$quellrennen, $teamName]);
 
     $fahrerListe = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -61,8 +72,14 @@ if (isset($_POST['kopieren'])) {
 
 }
 
-$statement = $pdo->prepare("SELECT MitarbeiterID, TeamName, CONCAT(VornameF, ' ', NachnameF) AS Name FROM Fahrer");
-$statement->execute();
+$statement = $pdo->prepare("
+    SELECT MitarbeiterID,
+           TeamName,
+           CONCAT(VornameF, ' ', NachnameF) AS Name
+    FROM Fahrer
+    WHERE TeamName = ?
+");
+$statement->execute([$teamName]);
 $fahrer = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 $fahrerMap = [];
