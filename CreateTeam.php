@@ -1,8 +1,8 @@
 <?php
 // Autor: Dilara Öztürk
 
-include '/includes/db.inc.php';
-include '/includes/Functions.inc.php';
+include 'includes/db.inc.php';
+include 'includes/Functions.inc.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
