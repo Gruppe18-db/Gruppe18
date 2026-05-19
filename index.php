@@ -34,6 +34,6 @@
     <button type="submit">Login Teamchef</button>
 </form>
 
-<form action="CreateTeam.php" method="post">
+<form action="CreateTeam.php" method="get">
     <button type="submit">Team anlegen</button>
 </form>
