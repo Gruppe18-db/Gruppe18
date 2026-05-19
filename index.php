@@ -30,6 +30,7 @@
 
 <!-- Dilara Öztürk -->
 
+<hr/>
 <form action="LoginTeamchef.php" method="post">
     <button type="submit">Login Teamchef</button>
 </form>
