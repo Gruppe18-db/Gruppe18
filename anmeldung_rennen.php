@@ -244,3 +244,5 @@ for ($i = 0; $i < $anzahl; $i++) {
 }
 ?>
 </div>
+
+<p><a href="ManageCyclist.php">Zurück zur Fahrerverwaltung</a></p>
