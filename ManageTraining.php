@@ -17,7 +17,7 @@ $TeamNameSession = $_SESSION['TeamName'];
 $message = '';
 $success = '';
 
-try {
+try { // Trigger für den Fall, dass für einen Tag bereits ein Training angelegt wurde, da immer nur ein Training pro Tag gespeichert werden darf
     $pdo->exec("DROP TRIGGER IF EXISTS trg_training_no_double_day");
     $pdo->exec("
         CREATE TRIGGER trg_training_no_double_day
@@ -46,24 +46,26 @@ $stmt = $pdo->query("
 ");
 $trainingsziele = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") { // Prüft ob das Formular abgesendet wurde und liest danach die übermittelten Formulardaten aus
+    
     $mitarbeiterID = !empty($_POST["MitarbeiterID"]) ? (int)$_POST["MitarbeiterID"] : null;
+    
     $teamName = trim($_POST["TeamName"] ?? '');
     $datum = trim($_POST["Datum"] ?? '');
     $kilometer = trim($_POST["GefahreneKilometer"] ?? '');
     $ziel = trim($_POST["Ziel"] ?? '');
 
-    if (!$mitarbeiterID || !$teamName || !$datum || $kilometer === '' || !$ziel) {
+    if (!$mitarbeiterID || !$teamName || !$datum || $kilometer === '' || !$ziel) { // Prüft ob alle Pflichtfelder ausgefüllt wurden
         $message = "Bitte füllen Sie alle Felder aus.";
     } else {
-        try {
+        try { // Trainingsdaten werden in die Tabelle Training eingefügt, hier wird der Schritt erst vorbereitet
             $stmt = $pdo->prepare("
                 INSERT INTO Training
                     (MitarbeiterID, TeamName, Datum, GefahreneKilometer, Ziel)
                 VALUES
                     (:MitarbeiterID, :TeamName, :Datum, :GefahreneKilometer, :Ziel)
             ");
-            $stmt->execute([
+            $stmt->execute([ // Hier wird der BEfehl ausgeführt, die Daten werden in die Datenbank überführt
                 ':MitarbeiterID' => $mitarbeiterID,
                 ':TeamName' => $teamName,
                 ':Datum' => $datum,
@@ -72,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ]);
 
             $success = "Training wurde erfolgreich gespeichert.";
-        } catch (PDOException $e) {
+        } catch (PDOException $e) { // Wenn nicht alle Eingaben korrekt und ordnungsgemäß sind kommt es zu einer dieser Meldungen
             if (strpos($e->getMessage(), 'bereits ein Training') !== false || $e->getCode() === '45000') {
                 $message = "Für diesen Fahrer wurde an diesem Tag bereits ein Training gespeichert.";
             } else {
@@ -81,15 +83,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
-
-$stmt = $pdo->prepare("
+// Hier werden die Datensätze aus der Datenbank ausgelesen, also die Anfrage vorbereitet
+$stmt = $pdo->prepare(" 
     SELECT MitarbeiterID, TeamName, Datum, GefahreneKilometer, Ziel
     FROM Training
     WHERE TeamName = ?
     ORDER BY Datum DESC, MitarbeiterID ASC
 ");
-$stmt->execute([$TeamNameSession]);
-$trainingsListe = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute([$TeamNameSession]); // Hier wird die Anfrage ausgeführt
+$trainingsListe = $stmt->fetchAll(PDO::FETCH_ASSOC); // Die Rückgaben werden als assoziatives Array gespeichert
 ?>
 
 <!DOCTYPE html>
