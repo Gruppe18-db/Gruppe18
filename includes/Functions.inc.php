@@ -1,17 +1,18 @@
 <?php
 // Autor: Dilara Öztürk
 
-function createTeamchef($pdo, $LoginnameTC, $Kennwort, $VornameTC, $NachnameTC) {
+function createTeamchef($pdo, $LoginnameTC, $Kennwort, $VornameTC, $NachnameTC, $TeamName) {
     $hash = password_hash($Kennwort, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("
-    INSERT INTO Teamchef (Loginname, VornameTC, NachnameTC, Kennwort)
-    VALUES (:Loginname, :VornameTC, :NachnameTC, :Kennwort)"
+    INSERT INTO Teamchef (Loginname, VornameTC, NachnameTC, Kennwort, TeamName)
+    VALUES (:Loginname, :VornameTC, :NachnameTC, :Kennwort, :TeamName)"
     );
     $stmt->execute([
         'Loginname' => $LoginnameTC,
         'VornameTC' => $VornameTC,
         'NachnameTC' => $NachnameTC,
-        'Kennwort' => $hash
+        'Kennwort' => $hash,
+        'TeamName' => $TeamName
     ]);
 }
 
@@ -19,9 +20,10 @@ function createTeam($pdo, $TeamName, $LoginnameTC) {
     $stmt1 = $pdo->prepare("INSERT INTO Team (TeamName, LoginnameTC) VALUES (:TeamName, :LoginnameTC)"
     );
     $stmt1->execute(['TeamName' => $TeamName, 'LoginnameTC' => $LoginnameTC]);
-    $stmt2 = $pdo->prepare("UPDATE Teamchef SET TeamName = :TeamName WHERE LoginnameTC = :LoginnameTC"
+    /* $stmt2 = $pdo->prepare("UPDATE Teamchef SET TeamName = :TeamName WHERE LoginnameTC = :LoginnameTC"
     );
-    $stmt2->execute(['TeamName' => $TeamName, 'LoginnameTC' => $LoginnameTC]);
+    $stmt2->execute(['TeamName' => $TeamName, 'LoginnameTC' => $LoginnameTC]); */
+    
 }
 
 function teamExists($pdo, $TeamName) {
