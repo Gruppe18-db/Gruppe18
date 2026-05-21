@@ -1,6 +1,5 @@
 <?php
 // Autor: Dilara Öztürk
-// unten zu index.php ändern!
 include 'includes/db.inc.php';
 include 'includes/Functions.inc.php';
 
@@ -32,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Hier werden die Eingaben in dem 
 <meta charset="UTF-8">
 <title>Neues Team anlegen</title>
 </head>
-<!-- <body>  
-<h1>Neues Team anlegen</h1> -->
+<body>  
+<h1>Neues Team anlegen</h1>
     
 <form method="post">
     Teamname: <input name="TeamName" required><br><br>
@@ -44,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Hier werden die Eingaben in dem 
     <button type="submit">Anlegen</button>
 </form>
 
-<p><a href="index.html">Zurück zur Startseite</a></p>
+<p><a href="index.php">Zurück zur Startseite</a></p>
 
 <?php 
-if (!empty($error)) echo "<p style='color:green;'>".htmlspecialchars($error)."</p>"; 
+if (!empty($message)) echo "<p style='color:green;'>".htmlspecialchars($message)."</p>"; 
 ?>
 
 </body>
