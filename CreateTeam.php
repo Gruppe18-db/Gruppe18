@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Hier werden die Eingaben in dem 
     } else {
         // Team und Teamchef werden anlgelegt, die Funktionen stehen in der Functions.inc.php Datei
         createTeam($pdo, $TeamName, $LoginnameTC);
-        createTeamchef($pdo, $LoginnameTC, $Kennwort, $VornameTC, $NachnameTC);
+        createTeamchef($pdo, $LoginnameTC, $Kennwort, $VornameTC, $NachnameTC, $TeamName);
 
         $message = "Team und Teamchef wurden erfolgreich angelegt.";
     }
