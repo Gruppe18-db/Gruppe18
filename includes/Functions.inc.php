@@ -17,13 +17,9 @@ function createTeamchef($pdo, $LoginnameTC, $Kennwort, $VornameTC, $NachnameTC, 
 }
 
 function createTeam($pdo, $TeamName, $LoginnameTC) {
-    $stmt1 = $pdo->prepare("INSERT INTO Team (TeamName, LoginnameTC) VALUES (:TeamName, :LoginnameTC)"
+    $stmt = $pdo->prepare("INSERT INTO Team (TeamName, LoginnameTC) VALUES (:TeamName, :LoginnameTC)"
     );
-    $stmt1->execute(['TeamName' => $TeamName, 'LoginnameTC' => $LoginnameTC]);
-    /* $stmt2 = $pdo->prepare("UPDATE Teamchef SET TeamName = :TeamName WHERE LoginnameTC = :LoginnameTC"
-    );
-    $stmt2->execute(['TeamName' => $TeamName, 'LoginnameTC' => $LoginnameTC]); */
-    
+    $stmt->execute(['TeamName' => $TeamName, 'LoginnameTC' => $LoginnameTC]);
 }
 
 function teamExists($pdo, $TeamName) {
