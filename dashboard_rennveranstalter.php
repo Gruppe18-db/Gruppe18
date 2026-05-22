@@ -5,6 +5,7 @@
 <?php
 session_start();
 include 'includes/db.inc.php';
+include 'includes/functions.inc.php';
 
 if (!isset($_SESSION['NameRV'])) {
     header("Location: index.php");
@@ -33,21 +34,13 @@ if (!empty($_POST['Datum'])) {
     }
 
     try {
-    $statement = $pdo->prepare( "INSERT INTO Rennen 
-    (Datum, Startort, AnzahlGefahreneKilometer, Hoehenmeter, MaxSteigung, NameRV)
-    VALUES 
-    (:datum, :startort, :km, :hoehenmeter, :steigung, :namerv)");
-
-     $statement->execute([ // Eingaben sind nur Werte, nicht Teil der SQL-Anweisung, daher keine SQL-Injection möglich
-        ':datum' => $Datum,
-        ':startort' => $Startort,
-        ':km' => $Km,
-        ':hoehenmeter' => $Hoehenmeter,
-        ':steigung' => $Steigung,
-        ':namerv' => $NameRV
-    ]);
-
-        $meldung = "Rennen erfolgreich erstellt!";
+    
+        if (createRace($pdo, $Datum, $Startort, $Km, $Hoehenmeter, $Steigung, $NameRV)) {
+    
+            $meldung = "Rennen erfolgreich erstellt!";
+        } else {
+            $meldung = "Fehler beim Erstellen des Rennens!";
+        }
     } catch (PDOException $e)  {
         $meldung = "Fehler beim Speichern ";
     }

@@ -14,6 +14,8 @@
 
 <?php
 include 'includes/db.inc.php';
+include 'includes/functions.inc.php';
+
 
     if (!empty($_POST['NameRV']) && !empty($_POST['Kennwort'])) {
 
@@ -21,17 +23,14 @@ include 'includes/db.inc.php';
         $Kennwort = $_POST['Kennwort'];
 
         if (strlen($Kennwort) < 6) {
-            echo "Passwort muss mindestens 6 Zeichen lang sein";
-            return;
+            echo "<p>Passwort muss mindestens 6 Zeichen lang sein</p>";
+            exit;
         }
 
         $hash = password_hash($Kennwort, PASSWORD_DEFAULT);
 
-        $statement = $pdo->prepare("SELECT * FROM Rennveranstalter WHERE NameRV = :name"); //Keine SQL-Injection, da nur Name überprüft wird
-        $statement->execute([ ':name' => $NameRV]);
-
-        if ($statement->fetch()) {
-            echo "Name bereits vergeben!";
+        if (rennveranstalterExists($pdo, $NameRV)) {
+            echo "<p>Name bereits vergeben!</p>";
 
         } else {
 
@@ -41,11 +40,11 @@ include 'includes/db.inc.php';
                 ':name' => $NameRV,
                 ':password' => $hash
             ])) {
-                echo "Registrierung erfolgreich!";
+                echo "<p>Registrierung erfolgreich!</p>";
                 echo '<a href="index.php"><button>Zurück zur Startseite</button></a>';
                 
             } else {
-                echo "Fehler beim Speichern ";
+                echo "<p>Fehler beim Speichern!</p>";
             }
         }
 }

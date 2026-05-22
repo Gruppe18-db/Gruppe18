@@ -69,4 +69,95 @@ function deleteCyclist($pdo, $MitarbeiterID, $TeamName) {
     $stmt->execute([$MitarbeiterID, $TeamName]);
 }
 
+// Oleksandra Ishmatova
+
+function rennveranstalterExists($pdo, $NameRV) {
+
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) 
+        FROM Rennveranstalter
+        WHERE NameRV = ?
+    ");
+
+    $stmt->execute([$NameRV]);
+
+    return $stmt->fetchColumn() > 0;
+}
+
+function loginRennveranstalter($pdo, $NameRV, $Kennwort) {
+
+    $stmt = $pdo->prepare("
+        SELECT NameRV, Kennwort
+        FROM Rennveranstalter
+        WHERE NameRV = ?
+    ");
+
+    $stmt->execute([$NameRV]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($Kennwort, $user['Kennwort'])) {
+        return $user;
+    }
+    return false;
+}
+
+function resultsExist($pdo, $rennen_id) {
+
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM NimmtTeil
+        WHERE RID = ?
+        AND (Platzierung IS NOT NULL OR Fahrtzeit IS NOT NULL)
+    ");
+
+    $stmt->execute([$rennen_id]);
+    return $stmt->fetchColumn() > 0;
+}
+
+function getRaceParticipants($pdo, $rennen_id) {
+
+    $stmt = $pdo->prepare("
+        SELECT MitarbeiterID, Startnummer, Platzierung, Fahrtzeit
+        FROM NimmtTeil
+        WHERE RID = ?
+        ORDER BY Startnummer
+    ");
+
+    $stmt->execute([$rennen_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function createRace($pdo, $Datum, $Startort, $Km, $Hoehenmeter, $Steigung, $NameRV) {
+
+    $stmt = $pdo->prepare("
+        INSERT INTO Rennen
+        (Datum, Startort, AnzahlGefahreneKilometer, Hoehenmeter, MaxSteigung, NameRV)
+        VALUES
+        (?, ?, ?, ?, ?, ?)
+    ");
+
+    return $stmt->execute([
+        $Datum,
+        $Startort,
+        $Km,
+        $Hoehenmeter,
+        $Steigung,
+        $NameRV
+    ]);
+}
+
+function getTeamDrivers($pdo, $teamName) {
+
+    $stmt = $pdo->prepare("
+        SELECT MitarbeiterID,
+               TeamName,
+               CONCAT(VornameF, ' ', NachnameF) AS Name
+        FROM Fahrer
+        WHERE TeamName = ?
+    ");
+
+    $stmt->execute([$teamName]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 ?>

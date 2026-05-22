@@ -5,6 +5,7 @@
 <?php
 session_start();
 include 'includes/db.inc.php';
+include 'includes/functions.inc.php';
 
 if (!isset($_SESSION['NameRV'])) {
     header("Location: index.php");
@@ -80,21 +81,9 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 if (isset($_POST['anzeigen']) || isset($_POST['speichern'])) {
 
     $rennen_id = (int) $_POST['rennen_id'];
-    $statement = $pdo->prepare("SELECT MitarbeiterID, Startnummer, Platzierung, Fahrtzeit FROM NimmtTeil WHERE RID = ? ORDER BY Startnummer");
-    $statement->execute([$rennen_id]);
-    $fahrer = $statement->fetchAll(PDO::FETCH_ASSOC);
-    $erfasst = false;
-
-foreach ($fahrer as $f) {
-
-    if ($f['Platzierung'] !== null) { //Verhinderung mehrfaches Eintragen
-        $erfasst = true;
-        break;
-    }
-
-}
-
-if ($erfasst) {
+    $fahrer = getRaceParticipants($pdo, $rennen_id);
+    
+if (resultsExist($pdo, $rennen_id)) {
     echo "<p>Ergebnisse bereits erfasst!</p>";
 } else {
 

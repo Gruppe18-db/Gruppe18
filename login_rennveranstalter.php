@@ -5,26 +5,21 @@
 <?php
 session_start();
 include 'includes/db.inc.php';
+include 'includes/functions.inc.php';
 
     if (!empty($_POST['NameRV']) && !empty($_POST['Kennwort'])) {
 
     $NameRV = trim($_POST['NameRV']);
     $Kennwort = $_POST['Kennwort'];
 
-    $statement = $pdo->prepare("SELECT NameRV, Kennwort FROM Rennveranstalter WHERE NameRV = :name"); 
+    $user = loginRennveranstalter($pdo, $NameRV, $Kennwort);
 
-    $statement->execute(['name' => $NameRV]);
-
-    $user = $statement->fetch();
-
-    if ($user && password_verify($Kennwort, $user['Kennwort'])) {
+    if ($user) {
         $_SESSION['NameRV'] = $NameRV;
-
         header("Location: dashboard_rennveranstalter.php");
         exit;
     } else {
-        $error = "Ungültige Daten!";
-
+        $error = "Ungültiger Name oder Passwort!";
     }
 }
     

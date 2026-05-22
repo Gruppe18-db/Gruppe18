@@ -5,6 +5,7 @@
 <?php  
 session_start();
 include 'includes/db.inc.php';
+include 'includes/functions.inc.php';
 
 if (!isset($_SESSION['teamchef_logged_in'])) {
     header("Location: index.php");
@@ -74,15 +75,7 @@ if (isset($_POST['kopieren'])) {
 
 }
 
-$statement = $pdo->prepare("
-    SELECT MitarbeiterID,
-           TeamName,
-           CONCAT(VornameF, ' ', NachnameF) AS Name
-    FROM Fahrer
-    WHERE TeamName = ?
-");
-$statement->execute([$teamName]);
-$fahrer = $statement->fetchAll(PDO::FETCH_ASSOC);
+$fahrer = getTeamDrivers($pdo, $teamName);
 
 $fahrerMap = [];
 
@@ -201,6 +194,11 @@ $rennen = $statement->fetchAll(PDO::FETCH_ASSOC);
 <?php 
 if (isset($_POST['weiter'])) {
     $anzahl = $_POST['anzahl'];
+
+    if (empty($anzahl) || $anzahl < 1) {
+        echo "<p>Bitte Anzahl Fahrer eingeben!</p>";
+        exit;
+    }
 ?>
 
 <div>
