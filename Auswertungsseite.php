@@ -6,14 +6,15 @@ require_once 'includes/db.inc.php';
 session_start();
 
 $ziel = $_GET['ziel'];
-$start = $_GET['startdatum'] ?? null;
-$ende = $_GET['enddatum'] ?? null;
-$teamName = $_SESSION['TeamName'];
+$start = $_GET['startdatum'];
+$ende = $_GET['enddatum'];
 
+// falls kein TeamName -> user nicht eingeloggt -> weiterleitung auf Login Seite
 if (empty($_SESSION['TeamName'])) {
-    header("Location: login.php");
+    header("Location: LoginTeamchef.php");
     exit;
 }
+$teamName = $_SESSION['TeamName'];
 
 $auswertung = new Auswertung($pdo);
 $fahrerDaten = $auswertung->getDaten($teamName, $ziel, $start, $ende);
@@ -27,12 +28,21 @@ $fahrerDaten = $auswertung->getDaten($teamName, $ziel, $start, $ende);
     </head>
     <body>
         <h1>Auswertung</h1>
+
+        <p>Trainingsziel: <?php echo htmlspecialchars($ziel); ?></p>
+        <p>
+            Zeitraum:
+            <?php echo $start ? htmlspecialchars($start) : "-"; ?>
+            bis
+            <?php echo $ende ? htmlspecialchars($ende) : "-"; ?>
+        </p>
+            <!-- jeweils eine Tabelle für jeden Fahrer-->
             <?php foreach ($fahrerDaten as $mid => $fahrer): ?>
 
                 <table border="1">
                     <tr>
                         <th colspan="7">
-                            <?php echo $mid . " " . $fahrer['Name']; ?>
+                            <?php echo $mid . " " . htmlspecialchars($fahrer['Name']); ?>
                         </th>
                     </tr>
 
@@ -47,22 +57,28 @@ $fahrerDaten = $auswertung->getDaten($teamName, $ziel, $start, $ende);
                     </tr>
 
                     <?php
+                    // in der Tabelle ein Datensatz pro Monat
                     foreach ($fahrer['trainings'] as $monat => $werte):
                     ?>
                     <tr>
-                        <td><?php echo $monat; ?></td>
+                        <td><?php echo htmlspecialchars($monat); ?></td>
                         <td><?php echo $werte['summe']; ?></td>
-                        <td><?php echo $werte['durchschnitt']; ?></td>
+                        <td><?php echo number_format($werte['durchschnitt'], 2); ?></td>
                         <td><?php echo $werte['min']; ?></td>
                         <td><?php echo $werte['max']; ?></td>
-                        <td><?php echo $werte['median']; ?></td>
-                        <td><?php echo $werte['stdabw']; ?></td>
+                        <td><?php echo number_format($werte['median'], 2); ?></td>
+                        <td><?php echo number_format($werte['stdabw'], 2); ?></td>
                     </tr>
                     <?php endforeach; ?>
 
                 </table>
                 <br><br>
             <?php endforeach; ?>
-                
+
+            <p>
+                <a href="Auswertungsbereich.php">
+                    <button>neue Suche</button>
+                </a>
+            </p>
     </body>
 </html>

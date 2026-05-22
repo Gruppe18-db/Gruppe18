@@ -1,6 +1,7 @@
 <!-- Max Boger -->
 <?php
 
+// Klasse zur Berechnung der Daten für die Auswertung der Trainings
 class Auswertung
 {
     private PDO $pdo;
@@ -10,8 +11,10 @@ class Auswertung
         $this->pdo = $pdo;
     }
 
+    // holt die gewünschten Fahrerdaten -> speichert die strukturiert in einem Array
     public function getDaten(string $team, string $ziel, $start, $ende): array
     {
+        // die stored procedure erwartet null falls kein Datum angegeben ist
         $start = $start ?: null;
         $ende  = $ende ?: null;
 
@@ -25,10 +28,12 @@ class Auswertung
 
         $fahrerDaten = [];
 
+        // durchläuft alle Datensätze, die vn der Stored Procedure geliefert wurden
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $mid = $row['MitarbeiterID'];
             $monat = $row['Monat'];
 
+            // in $fahrerDaten ein neues Array für einen Fahrer anlegen, falls für diesen noch keins existiert
             if(!isset($fahrerDaten[$mid])) {
                 $fahrerDaten[$mid] = [
                     'Name' => $row['NachnameF'] . ', ' . $row['VornameF'],
@@ -36,8 +41,10 @@ class Auswertung
                 ];
             }
 
+            // die Rohdaten, die als String gespeichert sind, werden in ein Array umgewandelt
             $rohdaten = json_decode($row['Rohdaten'], true) ?? [];
 
+            // die Werte für die Auswertung zum Monat zugehörig speichern
             $fahrerDaten[$mid]['trainings'][$monat] = [
                 'summe' => $row['Summe'],
                 'durchschnitt' => $row['Durchschnitt'],

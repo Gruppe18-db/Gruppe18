@@ -13,10 +13,10 @@ $TeamName = $_SESSION['TeamName'];
 $success = '';
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['speichern'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['speichern'])) { // Prüft ob das Formular mit dem Button speichern abgesendet wurde
 
-    $MitarbeiterID = !empty($_POST['MitarbeiterID']) ? (int)$_POST['MitarbeiterID'] : null;
-    
+    $MitarbeiterID = !empty($_POST['MitarbeiterID']) ? (int)$_POST['MitarbeiterID'] : null; // Auslesen der MitarbeiterID und ob diese im Formular vorhanden ist
+    // Auslesen der Formularfelder, wenn das Feld ausgefüllt ist wird der Wert genutzt, wenn nicht wird ein leerer String genutzt
     $VornameF       = trim($_POST['VornameF'] ?? '');
     $NachnameF      = trim($_POST['NachnameF'] ?? '');
     $Strasse        = trim($_POST['Strasse'] ?? '');
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['speichern'])) {
     $Telefonnummer  = trim($_POST['Telefonnummer'] ?? '');
 
     if ($VornameF && $NachnameF) {
-        saveCyclist($pdo, $TeamName, $MitarbeiterID, $VornameF, $NachnameF, $Strasse, $Hausnummer, $PLZ, $Ort, $Telefonnummer);
+        saveCyclist($pdo, $TeamName, $MitarbeiterID, $VornameF, $NachnameF, $Strasse, $Hausnummer, $PLZ, $Ort, $Telefonnummer); // Aufrufen der Funktion in der Functions.inc.php Datei
         $success = "Fahrer wurde erfolgreich gespeichert.";
         header("Location: ManageCyclist.php");
     } else {
@@ -35,15 +35,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['speichern'])) {
 }
 
 if (isset($_GET['delete'])) {
-    $MitarbeiterID = (int)$_GET['delete'];
-    deleteCyclist($pdo, $MitarbeiterID, $TeamName);
+    $MitarbeiterID = (int)$_GET['delete']; // Die MitarbeiterID wird gelöscht
+    deleteCyclist($pdo, $MitarbeiterID, $TeamName); // Die Funktion in der Functions.inc.php Datei wird aufgerufen
     header("Location: ManageCyclist.php");
     exit;
 }
 
 $editCyclist = null;
 
-if (isset($_GET['edit'])) {
+if (isset($_GET['edit'])) { // Funktion zum Bearbeiten der Fahrer
     $MitarbeiterID = (int)$_GET['edit'];
     $stmt = $pdo->prepare("
         SELECT *
@@ -54,7 +54,7 @@ if (isset($_GET['edit'])) {
     $editCyclist = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-$CyclistList = getCyclist($pdo, $TeamName);
+$CyclistList = getCyclist($pdo, $TeamName); // getCyclist Funktion ist in der Functions.inc.php Datei gespeichert
 ?>
 
 <!DOCTYPE html>
